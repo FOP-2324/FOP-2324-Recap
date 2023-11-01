@@ -1,22 +1,37 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id("java")
-    id("application")
+    java
+    application
 }
 
 application {
-    mainClass.set("r01.Main")
-}
-
-repositories {
-    mavenCentral()
+    mainClass.set("r02.Main")
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation("org.tudalgo:fopbot:0.6.0")
+    implementation(libs.annotations)
+    implementation(libs.fopbot)
+    testImplementation(libs.junit.core)
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks {
+    val runDir = File("build/run")
+    withType<JavaExec> {
+        doFirst {
+            runDir.mkdirs()
+        }
+        workingDir = runDir
+    }
+    test {
+        doFirst {
+            runDir.mkdirs()
+        }
+        workingDir = runDir
+        useJUnitPlatform()
+    }
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
 }
