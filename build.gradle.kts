@@ -5,12 +5,13 @@ plugins {
 }
 
 application {
-    mainClass.set("r02.Main")
+    mainClass.set("r03.Main")
 }
 
 dependencies {
     implementation(libs.annotations)
     implementation(libs.fopbot)
+    implementation(libs.algoutils.student)
     testImplementation(libs.junit.core)
 }
 
