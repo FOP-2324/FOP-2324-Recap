@@ -22,7 +22,7 @@ public class Main {
     }
 
     // Name of file for patterns
-    public static final String FILENAME = "R02Pattern.txt";
+    public static final String FILENAME = "R03Pattern.txt";
 
     public static void main(String[] args) {
         // Get number of columns from method
