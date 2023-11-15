@@ -1,5 +1,6 @@
 package r03;
 
+import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.World;
 
@@ -56,14 +57,10 @@ public class Main {
 
         // Get the pattern from the .txt file
         boolean[][] testPattern = patternProvider.getPattern();
-
         // Call initializeRobotsPattern
         Robot[] allRobots = main.initializeRobotsPattern(testPattern, numberOfColumns, numberOfRows);
 
         main.letRobotsMarch(allRobots);
-
-        // TODO: H2.2 - Put your code here:
-
     }
 
     /**
@@ -75,7 +72,15 @@ public class Main {
      * @return                  Number of robots in the world.
      */
     public int countRobotsInPattern(boolean[][] pattern, int numberOfColumns, int numberOfRows) {
-        return crash(); // TODO: H1.1 - remove if implemented
+        int counter = 0;
+        for(int index1 = 0; index1 < pattern.length && index1 < numberOfColumns; index1++) {
+            for(int index2 = 0; index2 < pattern[index1].length && index2 < numberOfRows; index2++) {
+                if(pattern[index1][index2]) {
+                    counter++;
+                }
+            }
+        }
+        return counter;
     }
 
     /**
@@ -87,7 +92,17 @@ public class Main {
      * @return                  Correctly initialized allRobots array.
      */
     public Robot[] initializeRobotsPattern(boolean[][] pattern, int numberOfColumns, int numberOfRows) {
-        return crash(); // TODO: H1.2 - remove if implemented
+        Robot[] allRobots = new Robot[countRobotsInPattern(pattern, numberOfColumns, numberOfRows)];
+        int counter = 0;
+        for(int index1 = 0; index1 < pattern.length && index1 < numberOfColumns; index1++) {
+            for(int index2 = 0; index2 < pattern[index1].length && index2 < numberOfRows; index2++) {
+                if(pattern[index1][index2]) {
+                    allRobots[counter] = new Robot(index1, index2, Direction.RIGHT, numberOfColumns-index1);
+                    counter++;
+                }
+            }
+        }
+        return allRobots;
     }
 
     /**
@@ -97,7 +112,13 @@ public class Main {
      * @return            True, if array contains robot.
      */
     public int numberOfNullRobots(Robot[] allRobots) {
-        return crash(); // TODO: H3.1 - remove if implemented
+        int counter = 0;
+        for (Robot kaesekuchen : allRobots) {
+            if (kaesekuchen == null) {
+                counter++;
+            }
+        }
+        return counter;
     }
 
     /**
@@ -107,7 +128,15 @@ public class Main {
      * @return        The array.
      */
     public int[] generateThreeDistinctRandomIndices(int bound) {
-        return crash(); // TODO: H3.2 - remove if implemented
+        int i = 0, j = 0, k = 0;
+
+        while(i == j || i == k || j == k) {
+            i = ThreadLocalRandom.current().nextInt(bound);
+            j = ThreadLocalRandom.current().nextInt(bound);
+            k = ThreadLocalRandom.current().nextInt(bound);
+        }
+
+        return new int[] {i, j, k};
     }
 
     /**
@@ -116,7 +145,23 @@ public class Main {
      * @param array   The array to be sorted.
      */
     public void sortArray(int[] array) {
-        crash(); // TODO: H3.3 - remove if implemented
+        int apfelkuchen;
+
+        if(array[0] > array[1]) {
+            apfelkuchen = array[1];
+            array[1] = array[0];
+            array[0] = apfelkuchen;
+        }
+        if(array[0] > array[2]) {
+            apfelkuchen = array[2];
+            array[2] = array[0];
+            array[0] = apfelkuchen;
+        }
+        if(array[1] > array[2]) {
+            apfelkuchen = array[2];
+            array[2] = array[1];
+            array[1] = apfelkuchen;
+        }
     }
 
     /**
@@ -129,7 +174,10 @@ public class Main {
      * @param allRobots     Array containing the robots.
      */
     public void swapRobots(int[] indices, Robot[] allRobots) {
-        crash(); // TODO: H3.4 - remove if implemented
+        Robot tmpRobot = allRobots[indices[2]];
+        allRobots[indices[2]] = allRobots[indices[1]];
+        allRobots[indices[1]] = allRobots[indices[0]];
+        allRobots[indices[0]] = tmpRobot;
     }
 
     /**
@@ -140,7 +188,14 @@ public class Main {
      * @return          The reduced array.
      */
     public Robot[] reduceRobotArray(Robot[] robots, int reduceBy) {
-        return crash(); // TODO: H3.5 - remove if implemented
+        Robot[] reducedArray = new Robot[robots.length-reduceBy];
+        int index = 0;
+        for(Robot robot : robots) {
+            if(robot != null) {
+                reducedArray[index++] = robot;
+            }
+        }
+        return reducedArray;
     }
 
     /**
@@ -152,6 +207,25 @@ public class Main {
      * @param allRobots   Array containing all the robots.
      */
     public void letRobotsMarch(Robot[] allRobots) {
-        crash(); // TODO: H4 - remove if implemented
+        while(numberOfNullRobots(allRobots) != allRobots.length) {
+            for(int i = 0; i < allRobots.length; i++) {
+                if(allRobots[i] != null) {
+                    allRobots[i].putCoin();
+                    if(allRobots[i].isFrontClear()) {
+                        allRobots[i].move();
+                    } else {
+                        allRobots[i] = null;
+                    }
+                }
+            }
+            if(allRobots.length >= 3) {
+                int[] randomIndices = generateThreeDistinctRandomIndices(allRobots.length);
+                sortArray(randomIndices);
+                swapRobots(randomIndices, allRobots);
+            }
+            if(numberOfNullRobots(allRobots) >= 3) {
+                allRobots = reduceRobotArray(allRobots, numberOfNullRobots(allRobots));
+            }
+        }
     }
 }
