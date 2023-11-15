@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClass.set("r03.Main")
+    mainClass.set("r04.Main")
 }
 
 dependencies {
