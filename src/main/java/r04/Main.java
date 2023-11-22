@@ -22,7 +22,7 @@ public class Main {
         World.setSize(5, 7);
         World.setVisible(true);
 
-        RobotWithOffspring robot = new RobotWithOffspring(5, 7, Direction.LEFT, 12);
+        /*RobotWithOffspring robot = new RobotWithOffspring(5, 7, Direction.LEFT, 12);
 
         RobotWithOffspring2 robot2 = new RobotWithOffspring2(5, 7, Direction.LEFT, 22);
 
@@ -41,6 +41,6 @@ public class Main {
         // ro2.getX();
 
         int number = 3 * 1_000_000_000;
-        System.out.println(number);
+        System.out.println(number);*/
     }
 }

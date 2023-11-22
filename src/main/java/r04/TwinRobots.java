@@ -2,7 +2,7 @@ package r04;
 
 import fopbot.Direction;
 
-/**
+/**0
  * A class that is being used to compare the classes RobotWithOffspring and RobotWithOffspring2
  */
 public class TwinRobots {
