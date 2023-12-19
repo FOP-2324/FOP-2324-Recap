@@ -12,8 +12,9 @@ public class Preconditions {
      * @param primaryArray The primary array to be validated
      * @throws ArrayIsNullException Thrown when the given primary array is null
      */
-    public static void checkPrimaryArrayNotNull(double[][] primaryArray) {
-        crash(); // TODO: H3.1 - remove if implemented
+    public static void checkPrimaryArrayNotNull(double[][] primaryArray) throws ArrayIsNullException {
+        if(primaryArray == null)
+            throw new ArrayIsNullException();
     }
 
     /**
@@ -27,8 +28,12 @@ public class Preconditions {
      * @throws AtIndexException Thrown when any secondary array in primaryArray is
      *                          null
      */
-    public static void checkSecondaryArraysNotNull(double[][] primaryArray) {
-        crash(); // TODO: H3.1 - remove if implemented
+    public static void checkSecondaryArraysNotNull(double[][] primaryArray) throws AtIndexException {
+        for(int i = 0; i < primaryArray.length; i++) {
+            if(primaryArray[i] == null) {
+                throw new AtIndexException(i);
+            }
+        }
     }
 
     /**
@@ -37,8 +42,10 @@ public class Preconditions {
      * @param number The number to be validated
      * @throws WrongNumberException Thrown when the {@code number} is negative
      */
-    public static void checkNumberNotNegative(double number) {
-        crash(); // TODO: H3.1 - remove if implemented
+    public static void checkNumberNotNegative(double number) throws WrongNumberException {
+        if(number < 0) {
+            throw new WrongNumberException(number);
+        }
     }
 
     /**
@@ -56,7 +63,13 @@ public class Preconditions {
      *                              {@code primaryArray} is negative or
      *                              bigger than {@code max}
      */
-    public static void checkValuesInRange(double[][] primaryArray, double max) {
-        crash(); // TODO: H3.1 - remove if implemented
+    public static void checkValuesInRange(double[][] primaryArray, double max) throws AtIndexPairException {
+        for(int i = 0; i < primaryArray.length; i++) {
+            for(int j = 0; j < primaryArray[i].length; j++) {
+                if(primaryArray[i][j] < 0 || primaryArray[i][j] > max) {
+                    throw new AtIndexPairException(i, j);
+                }
+            }
+        }
     }
 }

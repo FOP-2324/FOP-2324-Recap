@@ -3,6 +3,8 @@ package r08.preconditions;
 /**
  * Thrown when a max value is negative.
  */
-public class WrongNumberException {
-    // TODO: H2 - remove if implemented
+public class WrongNumberException extends Exception {
+    public WrongNumberException(double value) {
+        super(String.valueOf(value));
+    }
 }

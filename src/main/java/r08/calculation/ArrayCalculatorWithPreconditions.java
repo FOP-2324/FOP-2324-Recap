@@ -1,5 +1,12 @@
 package r08.calculation;
 
+import r08.preconditions.ArrayIsNullException;
+import r08.preconditions.AtIndexException;
+import r08.preconditions.AtIndexPairException;
+import r08.preconditions.WrongNumberException;
+
+import static r08.preconditions.Preconditions.*;
+
 import static org.tudalgo.algoutils.student.Student.crash;
 
 public class ArrayCalculatorWithPreconditions implements ArrayCalculator {
@@ -15,7 +22,18 @@ public class ArrayCalculatorWithPreconditions implements ArrayCalculator {
      *                arrays.
      */
     @Override
-    public double addUp(double[][] theArray, double max) {
-        return crash(); // TODO: H3.2 - remove if implemented
+    public double addUp(double[][] theArray, double max) throws ArrayIsNullException, AtIndexException, WrongNumberException, AtIndexPairException {
+        checkPrimaryArrayNotNull(theArray);
+        checkSecondaryArraysNotNull(theArray);
+        checkNumberNotNegative(max);
+        checkValuesInRange(theArray, max);
+
+        double result = 0;
+        for(int i = 0; i < theArray.length; i++) {
+            for(int j = 0; j < theArray[i].length; j++) {
+                result += theArray[i][j];
+            }
+        }
+        return result;
     }
 }

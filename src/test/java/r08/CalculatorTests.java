@@ -1,5 +1,6 @@
 package r08;
 
+import org.junit.jupiter.api.Assertions;
 import r08.calculation.ArrayCalculator;
 import r08.calculation.ArrayCalculatorWithPreconditions;
 import r08.calculation.ArrayCalculatorWithRuntimeExceptions;
@@ -103,7 +104,12 @@ class CalculatorTests {
      * @param expectedSum The expected sum to be calculated
      */
     private void testSum(ArrayCalculator sut, double[][] array, double max, double expectedSum) {
-        crash(); // TODO: H5.1 - remove if implemented
+        try {
+            Assertions.assertEquals(expectedSum, sut.addUp(array, max));
+        }
+        catch (Exception e) {
+            Assertions.assertDoesNotThrow(() -> sut.addUp(array, max));
+        }
     }
 
     /**
@@ -127,6 +133,9 @@ class CalculatorTests {
      */
     private <T extends Throwable> void testException(ArrayCalculator sut, double[][] array, double max, Class<T> expectedException,
                                                      String expectedExceptionMessage) {
-        crash(); // TODO: H5.2 - remove if implemented
+        var exc = Assertions.assertThrowsExactly(expectedException, () -> sut.addUp(array, max));
+        if(!expectedExceptionMessage.equals(exc.getMessage())) {
+            throw new AssertionError("%s : %s".formatted(expectedExceptionMessage, exc.getMessage()));
+        }
     }
 }
