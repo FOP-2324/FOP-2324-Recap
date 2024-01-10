@@ -1,5 +1,13 @@
 package r09.basic;
 
-public class DoubleBasicBinaryOperations/*TODO: H1.4*/ {
-    // TODO: H1.4 - remove if implemented
+public class DoubleBasicBinaryOperations implements BasicBinaryOperations<Double, Double> {
+    @Override
+    public Double add(Double left, Double right) {
+        return left + right;
+    }
+
+    @Override
+    public Double mul(Double left, Double right) {
+        return left * right;
+    }
 }

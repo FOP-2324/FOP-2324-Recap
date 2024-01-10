@@ -1,5 +1,17 @@
 package r09.basic;
 
-public class IntegerFactory/*TODO 1.1*/ {
-    // TODO: H1.1 - remove if implemented
+public class IntegerFactory implements BasicFactory<Integer> {
+    private int current;
+    private final int step;
+
+    public IntegerFactory(int start, int step) {
+        this.current = start;
+        this.step = step;
+    }
+
+    public Integer create() {
+        int result = current;
+        current += step;
+        return current;
+    }
 }

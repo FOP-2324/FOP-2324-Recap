@@ -1,23 +1,32 @@
 package r09.sequence.operation;
 
+import r09.sequence.Sequence;
+
 import java.util.Iterator;
+import java.util.function.Function;
 
 import static org.tudalgo.algoutils.student.Student.crash;
 
-public class TransformingSequence/*TODO: H4.2*/ {
-    // TODO: H4.2 - uncomment if implemented
+public class TransformingSequence<T, R> implements Sequence<R> {
+    private final Sequence<? extends T> sequence;
+    private final Function<? super T, ? extends R> function;
+
+    public TransformingSequence(Sequence<? extends T> sequence, Function<? super T, ? extends R> function) {
+        this.sequence = sequence;
+        this.function = function;
+    }
 //    @Override
-    public Iterator</*TODO: H4.2 replace*/Object> iterator() {
+    public Iterator<R> iterator() {
         return new Iterator<>() {
-            // TODO: H4.2 - attributes here
+            private final Iterator<? extends T> iterator = sequence.iterator();
             @Override
             public boolean hasNext() {
-                return crash(); // TODO: H4.2 - remove if implemented
+                return iterator.hasNext();
             }
 
             @Override
-            public /*TODO: H4.2 replace*/Object next() {
-                return crash(); // TODO: H4.2 - remove if implemented
+            public R next() {
+                return function.apply(iterator.next());
             }
         };
     }
