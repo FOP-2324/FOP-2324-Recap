@@ -25,7 +25,7 @@ public class ComposedBinaryOperator<T> implements BinaryOperator<T> {
      * @param op2 Second operator.
      * @param op3 Third operator.
      */
-    public ComposedDoubleBinaryOperator(BinaryOperator<T> op1, BinaryOperator<T> op2, BinaryOperator<T> op3) {
+    public ComposedBinaryOperator(BinaryOperator<T> op1, BinaryOperator<T> op2, BinaryOperator<T> op3) {
         // Assign first parameter to first operator
         this.op1 = op1;
 
