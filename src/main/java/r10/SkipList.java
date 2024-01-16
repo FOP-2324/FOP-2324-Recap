@@ -146,7 +146,26 @@ public class SkipList<T> {
      * contain the element
      */
     private ListItem<ExpressNode<T>> get(T key) {
-        return crash();
+        if (isEmpty()) {
+            return null;
+        }
+        ListItem<ExpressNode<T>> current = head;
+        while(current != null) {
+            if(current.next == null) {
+                current = current.key.down;
+                continue;
+            }
+            ListItem<ExpressNode<T>> successor = current.next;
+            int value = cmp.compare(successor.key.value, key);
+            if(value == 0) {
+                return successor;
+            } else if(value < 0) {
+                current = current.next;
+            } else {
+                current = current.key.down;
+            }
+        }
+        return null;
     }
 
     /**
@@ -157,7 +176,7 @@ public class SkipList<T> {
      * @return {@code true} if this list contains the specified element
      */
     public boolean contains(T key) {
-        return crash(); // TODO: H1 - remove if implemented
+        return get(key) != null;
     }
 
     /**
@@ -211,7 +230,60 @@ public class SkipList<T> {
      * @param key the element to be added
      */
     public void add(T key) {
-        crash(); // TODO: H2 - remove if implemented
+        ListItem<ListItem<ExpressNode<T>>> positions = getInsertionPositions(key);
+        // Potential insertions on each level
+        int currentHeight = 1;
+        ListItem<ExpressNode<T>> lowerLevelNode = null;
+        do {
+            if (head == null) {
+                // Empty list, create the first level and sentinel node
+                head = new ListItem<>();
+                head.key = new ExpressNode<>();
+
+                // Insertion position on the first level
+                ListItem<ListItem<ExpressNode<T>>> node = new ListItem<>();
+                node.key = head;
+                positions = node;
+                height++;
+            } else if (currentHeight > height) {
+                // Create new level if it does not exist (new upper level)
+                ListItem<ExpressNode<T>> newHead = new ListItem<>();
+                newHead.key = new ExpressNode<>();
+                newHead.key.down = head;
+                head.key.up = newHead;
+                head = newHead;
+
+                ListItem<ListItem<ExpressNode<T>>> node = new ListItem<>();
+                node.key = head;
+                positions = node;
+                height++;
+            }
+            ListItem<ExpressNode<T>> node = new ListItem<>();
+            node.key = new ExpressNode<>();
+            node.key.value = key;
+
+            // Connect lower and upper levels
+            if (lowerLevelNode != null) {
+                node.key.down = lowerLevelNode;
+                lowerLevelNode.key.up = node;
+            }
+
+            assert positions != null;
+            ListItem<ExpressNode<T>> current = positions.key;
+            if (current.next != null) {
+                // Last node does not have a next node, so we do not need to adjust the references
+                current.next.key.prev = node;
+                node.next = current.next;
+            }
+
+            node.key.prev = current;
+            current.next = node;
+
+            positions = positions.next;
+            currentHeight++;
+            lowerLevelNode = node;
+        } while ((positions != null || currentHeight <= maxHeight) && probability.nextBoolean());
+        size++;
     }
 
     /**
@@ -221,7 +293,48 @@ public class SkipList<T> {
      * @param key the element to be removed from this list, if present
      */
     public void remove(T key) {
-        crash(); // TODO: H3 - remove if implemented
+        // Get the first occurrence of the element
+        ListItem<ExpressNode<T>> current = get(key);
+
+        // If the element is not null, that means it is present in the list
+        if (current != null) {
+            size--;
+        }
+
+        // Removal of element on all levels
+        while (current != null) {
+            ListItem<ExpressNode<T>> lowerLevel = current.key.down;
+            // Cannot be null since get returns non-null values if the element is found
+            // We checked that walker != null
+            assert current.key.prev != null;
+            if (current.key.prev.key.value == null && current.next == null) {
+                // Single element list
+                if (current.key.up == null) {
+                    // Head should be deleted
+                    // Since walker is non-null, the list is not empty
+                    assert head != null;
+                    head = head.key.down;
+                    if (lowerLevel != null) {
+                        lowerLevel.key.up = null;
+                    }
+                } else {
+                    // Adjust reference from up and down levels
+                    assert current.key.prev.key.up != null;
+                    current.key.prev.key.up.key.down = current.key.prev.key.down;
+                    // Since walker is non-null, the list is not empty
+                    assert current.key.prev.key.down != null;
+                    current.key.prev.key.down.key.up = current.key.prev.key.up;
+                }
+                height--;
+            } else {
+                // Adjust reference from prev and next nodes
+                current.key.prev.next = current.next;
+                if (current.next != null) {
+                    current.next.key.prev = current.key.prev;
+                }
+            }
+            current = lowerLevel;
+        }
     }
 
     /**
