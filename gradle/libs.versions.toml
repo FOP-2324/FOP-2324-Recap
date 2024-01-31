@@ -3,3 +3,5 @@ annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 junit-core = { module = "org.junit.jupiter:junit-jupiter", version = "5.10.0" }
 fopbot = { module = "org.tudalgo:fopbot", version = "0.7.0" }
 algoutils-student = { module = "org.tudalgo:algoutils-student", version = "0.7.0" }
+[plugins]
+javafxplugin = { id = "org.openjfx.javafxplugin", version = "0.1.0" }

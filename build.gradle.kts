@@ -2,10 +2,16 @@
 plugins {
     java
     application
+    alias(libs.plugins.javafxplugin)
+}
+
+javafx {
+    version = "17.0.1"
+    modules("javafx.controls", "javafx.fxml", "javafx.swing", "javafx.graphics", "javafx.base")
 }
 
 application {
-    mainClass.set("r12.Main")
+    mainClass.set("r13.SpaceInvaders")
 }
 
 dependencies {
